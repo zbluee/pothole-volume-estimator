@@ -194,7 +194,7 @@ def create_directories():
     for directory in directories:
         os.makedirs(directory, exist_ok=True)
 
-def get_proccessed_depth_map(depth_map, camera_surface_distance=0.5, scale_factor = 0.01167):
+def get_proccessed_depth_map(depth_map, camera_surface_distance=0.83, scale_factor = 0.01167):
     depth_map *= scale_factor
     proccessed_depth_map = depth_map - camera_surface_distance
     return proccessed_depth_map

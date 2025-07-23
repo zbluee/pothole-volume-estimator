@@ -3,7 +3,7 @@ Flask App for Pothole Detection CV Pipeline
 Clean version with utilities separated
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import numpy as np
 from datetime import datetime
@@ -182,6 +182,22 @@ def get_stats():
     data = load_existing_data()
     potholes = data["potholes"]
     return jsonify(calculate_statistics(potholes))
+
+@app.route('/uploads/<filename>')
+def serve_upload(filename):
+    """Serve uploaded images"""
+    return send_from_directory('./uploads', filename)
+
+@app.route('/processed/<pothole_id>/<filename>')
+def serve_processed(pothole_id, filename):
+    """Serve processed debug images"""
+    try:
+        processed_dir = f"./processed/{pothole_id}"
+        print(f"Serving from: {processed_dir}/{filename}")  # Debug log
+        return send_from_directory(processed_dir, filename)
+    except Exception as e:
+        print(f"Error serving processed file: {e}")
+        return f"File not found: {e}", 404
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
